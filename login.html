@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<title>Login Page</title>
+	</head>
+	<body>	
+		<h1 style="text-align: center">Login Page</h1>
+		<p>Please Enter The Following Information To Login:<br><br>
+			<form action="/loginAuth" method="POST">
+				<label>Username:</label>
+				<input style="width:200px" type="text" id="username" name="username"><br><br>
+				<label>Password:</label>
+				<input style="width:203px" type="text" id="password" name="password"><br><br>
+				<input type="submit" value="Submit">
+			</form>
+		<a href="/register">Create New User</a>
+		</p>
+		<p style="color: red">
+			{{ error }}
+		</p>
+	</body>
+</html>

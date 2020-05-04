@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>Home Page</title>
+		<style>
+			.navigationtab { background-color: #0000e0; overflow: hidden; }
+			.navigationtab a { float: left; color: #ffffff; text-align: center; padding: 14px 16px; text-decoration: none; font-size: 17px; }
+			.navigationtab a:hover { background-color: #eeee00; color: black; }
+		</style>
+	</head>
+	<body>
+		<div class="navigationtab">
+			<a class="active" href="/">Home</a>
+		</div>
+		<div class="navigationcontent">
+			<h1 style="text-align: center">Add A Photo</h1>
+			<form action="/photoAdd" method="POST" enctype="multipart/form-data">
+				<label>Upload Photo File:</label>
+				<input style="width:200px" type="file" id="filename" name="filename"><br><br>
+				<label>Caption:</label>
+				<input style="width:200px" type="text" id="caption" name="caption"><br><br>
+				<label>Visible To All Followers?:</label>
+				<input style="width:203px" type="checkbox" id="isvisible" name="isvisible"><br><br>
+				<label>Shared With Which Groups?:</label><br />
+				<select id="groups" name="groups" multiple>
+					{% for g in groups %}
+					<option value="{{ g }}">{{ g }}</option>
+					{% endfor %}
+				</select>
+				<br /><br />
+				<input type="submit" value="Submit">
+			</form>
+			<p style="color: red">
+				{{ error }}
+			</p>
+			<p style="color: green">
+				{{ success }}
+			</p>
+		</div>
+	</body>
+</html>

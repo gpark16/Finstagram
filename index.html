@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Home Page</title>
+		<style>
+			.navigationtab { background-color: #0000e0; overflow: hidden; }
+			.navigationtab a { float: left; color: #ffffff; text-align: center; padding: 14px 16px; text-decoration: none; font-size: 17px; }
+			.navigationtab a:hover { background-color: #eeee00; color: black; }
+		</style>
+	</head>
+	<body>
+		<div class="navigationtab">
+			<a class="active" href="/">Home</a>
+			{% if isLoggedIn == "Logout" %}
+				<a href="/post">Post</a>
+				<a href="/followers">Followers</a>
+				<a href="/addgroup">Add Group</a>
+			{% endif %}
+			<a href="/login">{{ isLoggedIn }}</a>
+		</div>
+		<div class="navigationcontent">
+			<h1 style="text-align: center">Finstagram</h1>
+			{{ content }}
+			{% if isLoggedIn == "Logout" %}
+				{% for img in photoURLs %}
+					<a href="/image?img_name={{img}}">
+						<img src="{{img}}" />
+					</a>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</body>
+</html>

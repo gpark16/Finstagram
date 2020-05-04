@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>Followers Page</title>
+		<style>
+			.navigationtab { background-color: #0000e0; overflow: hidden; }
+			.navigationtab a { float: left; color: #ffffff; text-align: center; padding: 14px 16px; text-decoration: none; font-size: 17px; }
+			.navigationtab a:hover { background-color: #eeee00; color: black; }
+		</style>
+	</head>
+	<body>
+		<div class="navigationtab">
+			<a class="active" href="/">Home</a>
+		</div>
+		<div class="navigationcontent">
+			<h1 style="text-align: center">Add A Follower</h1>
+			<form action="/addFollower" method="POST">
+				<label>Enter Username To Follower:</label>
+				<input style="width:200px" type="text" id="followee" name="followee"><br><br>
+				<input type="submit" value="Submit">
+			</form>
+			<p style="color: blue">
+				<b>{{ followmsg }}</b>
+			</p>
+
+			<form action="/updateRequest" method="POST">
+				<label>Awaiting A Follow:</label>
+				<p>
+					<select id="reqAccept" name="reqAccept">
+						{% for f in reqList %}
+						<option value="{{ f }}">{{ f }}</option>
+						{% endfor %}
+					</select>
+					<input id="subReq" name="subReq" type="submit" value="Accept">
+					<input id="subReq" name="subReq" type="submit" value="Deny">
+				</p>
+			</form>
+			<p style="color: blue">
+				<b>{{ acceptmsg }}</b>
+			</p>
+		</div>
+	</body>
+</html>

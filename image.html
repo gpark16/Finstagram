@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<title>Home Page</title>
+		<style>
+			.navigationtab { background-color: #0000e0; overflow: hidden; }
+			.navigationtab a { float: left; color: #ffffff; text-align: center; padding: 14px 16px; text-decoration: none; font-size: 17px; }
+			.navigationtab a:hover { background-color: #eeee00; color: black; }
+		</style>
+	</head>
+	<body>
+		<div class="navigationtab">
+			<a class="active" href="/">Home</a>
+		</div>
+		<div class="navigationcontent">
+			<h1 style="text-align: center">Finstagram</h1>
+			<p style="text-align: center">
+				<img src="{{imgName}}" /><br />
+				{{fName}} {{lName}}<br />
+				{{pDate}}<br />
+			</p>
+			{% if numTags > 0 %}
+			<p>
+				<b>Tagged By:</b><br />
+				{% for i in range(numTags) %}
+				{{ fnTagRows[i] }} {{ lsTagRows[i] }}<br />
+				{% endfor %}
+			</p>
+			{% endif %}
+			{% if numTags > 0 %}
+			<p>
+				<b>Reacted By:</b><br />
+				{% for i in range(numTags) %}
+				{{ unReactRows[i] }}
+				{% if emReactRows[i] %}
+				<img src="{{ emReactRows[i] }}" />
+				{% endif %}
+				<br />
+				{% endfor %}
+			</p>
+			{% endif %}
+		</div>
+	</body>
+</html>

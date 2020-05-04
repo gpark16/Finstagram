@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title>Followers Page</title>
+		<style>
+			.navigationtab { background-color: #0000e0; overflow: hidden; }
+			.navigationtab a { float: left; color: #ffffff; text-align: center; padding: 14px 16px; text-decoration: none; font-size: 17px; }
+			.navigationtab a:hover { background-color: #eeee00; color: black; }
+		</style>
+	</head>
+	<body>
+		<div class="navigationtab">
+			<a class="active" href="/">Home</a>
+		</div>
+		<div class="navigationcontent">
+			<h1 style="text-align: center">Add A Follower</h1>
+			<form action="/addgroupReq" method="POST">
+				<label>New Group Name:</label>
+				<input style="width:200px" type="text" id="name" name="name"><br><br>
+				<label>Description:</label>
+				<input style="width:243px" type="text" id="description" name="description"><br><br>
+				<input type="submit" value="Submit">
+			</form>
+			<p style="color: blue">
+				<b>{{ msg }}</b>
+			</p>
+		</div>
+	</body>
+</html>
