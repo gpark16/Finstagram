@@ -53,10 +53,8 @@ def home():
         text = 'Welcome To Finstagram, Please Login To Start Using This Program.'
     else:
         # Get the path names of all images for this user.
-        #query = 'SELECT DISTINCT p.filePath FROM (SELECT groupName FROM BelongTo WHERE username = %s) res, SharedWith s, Photo p WHERE res.groupName = s.groupName AND s.pID = p.pID AND p.allFollowers = 1 ORDER BY postingDate'
-        query = '(SELECT DISTINCT p.filePath FROM (SELECT groupName FROM BelongTo WHERE username = %s) res, SharedWith s, Photo p WHERE res.groupName = s.groupName AND s.pID = p.pID AND p.allFollowers = 1 ORDER BY postingDate) UNION (SELECT DISTINCT filePath FROM Photo WHERE poster = %s)'
-        data = run_sql_all(query, (session['username'], session['username']))
-        #data = run_sql_all(query, (session['username']))
+        query = '(SELECT DISTINCT p.filePath, p.postingDate FROM BelongTo b, SharedWith s, Photo p WHERE b.username = %s AND b.groupCreator = p.poster) UNION (SELECT DISTINCT filePath, postingDate FROM Photo WHERE poster = %s) UNION (SELECT DISTINCT filePath, postingDate FROM Photo p, Follow f WHERE f.follower = %s AND f.followee = p.poster AND f.followStatus = 1) ORDER BY postingDate DESC'
+        data = run_sql_all(query, (session['username'], session['username'], session['username']))
         for i in range(len(data)):
             rows.append("/static/{0}".format(data[i]['filePath']))
             print(data[i]['filePath'])
@@ -139,7 +137,7 @@ def loginAuth():
         for i in range(len(data)):
             rows.append("/static/{0}".format(data[i]['filePath']))
             print(data[i]['filePath'])
-        return render_template('index.html', photoURLs=rows, isLoggedIn=session['isLoggedIn'])
+        return redirect(url_for('home', photoURLs=rows, isLoggedIn=session['isLoggedIn']))
     else:
         return render_template('login.html', error='Invalid login. Please try again')
 
@@ -170,22 +168,24 @@ def image():
     data = run_sql_all(query, (pID))
     firstNameTagRows = []
     lastNameTagRows = []
-    for i in range(len(data)):
-        firstNameTagRows.append(data[i]['firstName'])
-        lastNameTagRows.append(data[i]['lastName'])
+    if (session['username'] == username):
+        for i in range(len(data)):
+            firstNameTagRows.append(data[i]['firstName'])
+            lastNameTagRows.append(data[i]['lastName'])
 
     # Determine who has reacted to the photo.
     query = 'SELECT r.username, r.emoji FROM Photo p, ReactTo r WHERE p.pID = r.pID AND p.pID = %s'
     data = run_sql_all(query, (pID))
     usernameReactRows = []
     emojiReactRows = []
-    for i in range(len(data)):
-        usernameReactRows.append(data[i]['username'])
-        # No empty emojis on screen.
-        if (data[i]['emoji'] is not None):
-            emojiReactRows.append('/static/' + data[i]['emoji'])
-        else:
-            emojiReactRows.append('')
+    if (session['username'] == username):
+        for i in range(len(data)):
+            usernameReactRows.append(data[i]['username'])
+            # No empty emojis on screen.
+            if (data[i]['emoji'] is not None):
+                emojiReactRows.append(data[i]['emoji'])
+            else:
+                emojiReactRows.append('')
 
     return render_template('image.html',
                            fName=firstName,
@@ -234,6 +234,7 @@ def postAdd():
     selGroups = []
     if (request.form.get('groups') is not None):
         selGroups = request.form.getlist('groups')
+    print(selGroups, isVisible)
 
     # Get all group names that you belong to.
     query = 'SELECT groupName FROM BelongTo WHERE username = %s'
@@ -265,6 +266,7 @@ def postAdd():
             # Select the creator and share with the group.
             query = 'SELECT groupCreator FROM FriendGroup WHERE groupName = %s'
             data = run_sql_one(query, (selGroups[i]))
+            print(selGroups[i])
             creator = data['groupCreator']
 
             # Share with the group.
